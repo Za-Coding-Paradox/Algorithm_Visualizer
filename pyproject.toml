@@ -1,7 +1,7 @@
 [project]
-name = "algorithm-visualizer"
+name = "AI-Path-Finder"
 version = "0.1.0"
-description = "A high-performance algorithm visualizer"
+description = "A high-performance algorithm visualizer & Path Finder"
 authors = [
     {name = "za-coding-paradox & Mtz00"}
 ]
