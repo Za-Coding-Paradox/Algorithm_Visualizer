@@ -1,0 +1,56 @@
+# --- Python Core ---
+__pycache__/
+*.py[cod]
+*$py.class
+
+# --- Distribution / Packaging ---
+dist/
+build/
+*.egg-info/
+.eggs/
+
+# --- Virtual Environments (Poetry / Mise) ---
+# Your structure uses .venv inside the root
+.venv/
+env/
+venv/
+ENV/
+
+# --- Poetry ---
+# poetry.lock is explicitly COMMITTED to ensure reproducible builds.
+# Do not ignore poetry.lock.
+poetry.toml
+
+# --- Mise (rtx) ---
+# mise.toml is usually committed, but local overrides should be ignored
+.mise.local.toml
+.mise/
+
+# --- Editors & IDEs ---
+# Neovim / Vim
+*.swp
+*.swo
+.netrwhist
+
+# VS Code (Optional, strictly personal settings)
+.vscode/
+
+# JetBrains
+.idea/
+
+# --- OS Specific ---
+.DS_Store
+Thumbs.db
+ehthumbs.db
+
+# --- Testing & Coverage ---
+.coverage
+htmlcov/
+.pytest_cache/
+.mypy_cache/
+
+# --- Project Specific (Output/Logs) ---
+*.log
+# If your visualizer saves screenshots or plots later:
+output/
+screenshots/
