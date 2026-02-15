@@ -1,4 +1,4 @@
-# AI Pathfinder Visualizer
+<center> # AI Pathfinder Visualizer </center>
 
 A modular Python application designed to visualize classic AI search algorithms on a 2D grid using a **Catppuccin Mocha** color palette. This project focuses on high-level abstraction and strict separation of concerns between UI, Logic, and Algorithms.
 
