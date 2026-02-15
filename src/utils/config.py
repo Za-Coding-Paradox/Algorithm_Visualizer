@@ -20,5 +20,5 @@ COLOR_FRONTIER = pygame.Color("#f9e2af")  # Nodes in Queue (Yellow)
 COLOR_EXPLORED = pygame.Color("#89b4fa")  # Visited Nodes (Blue)
 COLOR_PATH = pygame.Color("#f5c2e7")  # Final Path (Pink)
 
-DYNAMIC_SPAWN_CHANCE = 0.05  # 5% chance per step
+DYNAMIC_SPAWN_CHANCE = 0.01  # 5% chance per step
 STEP_DELAY = 0.05

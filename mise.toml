@@ -1,14 +1,9 @@
 [tools]
-# Pin Python to 3.12 (Stable, fast, compatible with all GUI libs)
 python = "3.14"
 
-# Let mise manage Poetry (cleaner than installing it globally with pip)
 poetry = "latest"
 
 [env]
-# CRITICAL: Forces Poetry to create the '.venv' folder INSIDE your project.
-# This allows Neovim (LSP) to instantly find your installed libraries.
 POETRY_VIRTUALENVS_IN_PROJECT = "true"
 
-# Ensures Poetry always uses the active mise Python version
 POETRY_VIRTUALENVS_PREFER_ACTIVE_PYTHON = "true"
