@@ -1,7 +1,6 @@
 """
 Logic Manager for the AI Pathfinder.
-This module bridges the UI (Grid) and the Search Algorithms,
-managing the execution of the selected solver.
+Bridges UI and Algorithms.
 """
 
 from algorithms.bfs import run_bfs
@@ -13,11 +12,6 @@ from algorithms.ucs import run_ucs
 
 
 class SimulationManager:
-    """
-    Controls the state of the search algorithm (Running, Finished, Idle).
-    Handles starting, stopping, stepping, and re-planning the search.
-    """
-
     def __init__(self):
         self.is_running = False
         self.is_finished = False
@@ -34,21 +28,14 @@ class SimulationManager:
         }
 
     def set_algorithm(self, algorithm_name):
-        """
-        Updates the selected algorithm if the simulation is idle.
-        """
         if not self.is_running:
             self.selected_algorithm = algorithm_name
-            print(f"Algorithm switched to: {self.selected_algorithm}")
 
     def start_simulation(self, grid_matrix, start_node, target_node, rows, cols):
-        """
-        Initializes the generator for the selected algorithm and starts the run state.
-        """
         if not self.is_running and start_node and target_node:
             self.is_finished = False
-            solver_function = self.algorithm_map[self.selected_algorithm]
 
+            solver_function = self.algorithm_map[self.selected_algorithm]
             self.current_generator = solver_function(
                 grid_matrix, start_node, target_node, rows, cols
             )
@@ -57,10 +44,6 @@ class SimulationManager:
         return False
 
     def step(self):
-        """
-        Advances the algorithm generator by one step.
-        Marks simulation as finished if the generator completes.
-        """
         if self.is_running and self.current_generator:
             try:
                 next(self.current_generator)
@@ -71,19 +54,11 @@ class SimulationManager:
         return False
 
     def stop_simulation(self):
-        """
-        Stops the running state and marks the simulation as finished.
-        """
         self.is_running = False
         self.is_finished = True
         self.current_generator = None
 
     def replan(self, grid_matrix, start_node, target_node):
-        """
-        Handles dynamic obstacles by stopping, cleaning the grid, and restarting.
-        Does NOT mark as finished, allowing the loop to continue.
-        """
-        print("CRITICAL BLOCKAGE! Re-planning path...")
         self.stop_simulation()
         self.is_finished = False
 

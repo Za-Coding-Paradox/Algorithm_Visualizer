@@ -23,29 +23,18 @@ class GridNode:
         self.row = row_index
         self.col = col_index
         self.cell_size = cell_size
-
-        # Exact pixel coordinates for Pygame rendering
         self.pixel_x = col_index * cell_size + offset_x
         self.pixel_y = row_index * cell_size + offset_y
-
         self.current_color = COLOR_EMPTY
-        self.state_type = "EMPTY"  # Options: EMPTY, WALL, DYNAMIC, START, TARGET
+        self.state_type = "EMPTY"
         self.neighbor_nodes = []
 
     def get_grid_coordinates(self):
         return self.row, self.col
 
-    # State Identification
     def is_barrier(self):
         return self.state_type == "WALL"
 
-    def is_origin(self):
-        return self.state_type == "START"
-
-    def is_destination(self):
-        return self.state_type == "TARGET"
-
-    # Visual State Setters
     def reset_to_empty(self):
         self.current_color = COLOR_EMPTY
         self.state_type = "EMPTY"
@@ -78,69 +67,43 @@ class GridNode:
         self.current_color = COLOR_PATH
 
     def render(self, surface):
-        """Draws the node and its border onto the provided surface."""
         rect_dimensions = (self.pixel_x, self.pixel_y, self.cell_size, self.cell_size)
         pygame.draw.rect(surface, self.current_color, rect_dimensions)
-
-        # Draws the border of the grid
         pygame.draw.rect(surface, COLOR_GRID, rect_dimensions, 1)
 
     def identify_neighbors(self, grid_matrix, total_rows, total_cols):
-        """
-        Identifies accessible neighbors following the
-        mandatory 6-direction clockwise order.
-        Includes CORNER CUTTING CHECKS to prevent passing through walls.
-        """
         self.neighbor_nodes = []
-
-        # (Row Change, Col Change)
-        STRICT_MOVEMENT_ORDER = [
-            (-1, 0),  # 1. Up
-            (0, 1),  # 2. Right
-            (1, 0),  # 3. Bottom
-            (1, 1),  # 4. Bottom-Right (Main Diagonal)
-            (0, -1),  # 5. Left
-            (-1, -1),  # 6. Top-Left (Main Diagonal)
-        ]
+        # Strict Clockwise Order + Main Diagonals Only
+        STRICT_MOVEMENT_ORDER = [(-1, 0), (0, 1), (1, 0), (1, 1), (0, -1), (-1, -1)]
 
         for row_change, col_change in STRICT_MOVEMENT_ORDER:
             target_row = self.row + row_change
             target_col = self.col + col_change
 
-            # 1. Boundary Check
             if 0 <= target_row < total_rows and 0 <= target_col < total_cols:
                 potential_neighbor = grid_matrix[target_row][target_col]
 
-                # 2. Basic Obstacle Check (Is it a Wall or Dynamic Obstacle?)
+                # Basic Obstacle Check
                 if (
                     not potential_neighbor.is_barrier()
                     and potential_neighbor.state_type != "DYNAMIC"
                 ):
-                    # 3. CORNER CUTTING CHECK (Prevent diagonal squeezing)
-                    # If moving diagonally (both row and col change is not 0)
+                    # Corner Cutting Check
                     if row_change != 0 and col_change != 0:
-                        # Check the two adjacent cardinal nodes
-                        # Node A: Same row, new col
-                        # Node B: New row, same col
                         node_a = grid_matrix[self.row][target_col]
                         node_b = grid_matrix[target_row][self.col]
-
-                        # If EITHER cardinal neighbor is a barrier, block the diagonal move.
-                        # This prevents "squeezing" through a diagonal gap.
                         if (
                             node_a.is_barrier()
                             or node_a.state_type == "DYNAMIC"
                             or node_b.is_barrier()
                             or node_b.state_type == "DYNAMIC"
                         ):
-                            continue  # Skip this neighbor
+                            continue
 
-                    # If we passed all checks, add to neighbors
                     self.neighbor_nodes.append(potential_neighbor)
 
 
 def initialize_grid(row_count, col_count, cell_size, offset_x, offset_y):
-    """Generates a 2D matrix of GridNode objects."""
     grid_matrix = []
     for r in range(row_count):
         current_row = []
@@ -152,21 +115,39 @@ def initialize_grid(row_count, col_count, cell_size, offset_x, offset_y):
 
 
 def render_grid_state(surface, grid_matrix):
-    """Iterates through all nodes and draws them."""
+    """
+    Draws the grid nodes AND the row/column numbering system.
+    """
+    font = pygame.font.SysFont("JetBrainsMono Nerd Font", 12)
+
+    # Draw Nodes
     for row in grid_matrix:
         for node in row:
             node.render(surface)
-    # Note: pygame.display.flip() is handled in the main loop, not here usually,
-    # but kept for compatibility with your existing snippets.
+
+    # Draw Column Numbers (Top)
+    # Assuming all rows have same length
+    if not grid_matrix:
+        return
+
+    first_row = grid_matrix[0]
+    for col_idx, node in enumerate(first_row):
+        text = font.render(str(col_idx), True, (150, 150, 150))
+        # Position above the grid
+        surface.blit(text, (node.pixel_x + 5, node.pixel_y - 15))
+
+    # Draw Row Numbers (Left)
+    for row_idx, row in enumerate(grid_matrix):
+        node = row[0]
+        text = font.render(str(row_idx), True, (150, 150, 150))
+        # Position left of the grid
+        surface.blit(text, (node.pixel_x - 20, node.pixel_y + 5))
 
 
 def get_node_from_mouse_click(
     mouse_position, row_count, col_count, cell_size, offset_x, offset_y
 ):
-    """Translates mouse pixel position to (row, col) grid coordinates."""
     pos_x, pos_y = mouse_position
-
-    # Reverse the pixel math: (Pixel - Offset) / Size
     target_col = (pos_x - offset_x) // cell_size
     target_row = (pos_y - offset_y) // cell_size
 

@@ -2,7 +2,6 @@ import heapq
 
 
 def run_ucs(grid_matrix, start_node, target_node, total_rows, total_cols):
-    # Priority Queue stores tuples: (Cost, PriorityCount, Node)
     priority_queue = []
     heapq.heappush(priority_queue, (0, 0, start_node))
 
@@ -19,15 +18,13 @@ def run_ucs(grid_matrix, start_node, target_node, total_rows, total_cols):
         visited_set.add(current_active_node)
 
         if current_active_node == target_node:
-            # Use 'yield from'
             yield from reconstruct_final_path(parent_tracker, target_node, start_node)
             return
 
         current_active_node.identify_neighbors(grid_matrix, total_rows, total_cols)
 
         for neighbor in current_active_node.neighbor_nodes:
-            new_cost = current_cost + 1  # Uniform cost of 1
-
+            new_cost = current_cost + 1
             if neighbor not in cost_so_far or new_cost < cost_so_far[neighbor]:
                 cost_so_far[neighbor] = new_cost
                 parent_tracker[neighbor] = current_active_node

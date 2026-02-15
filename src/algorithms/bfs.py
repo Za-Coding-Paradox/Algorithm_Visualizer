@@ -10,7 +10,6 @@ def run_bfs(grid_matrix, start_node, target_node, total_rows, total_cols):
         current_active_node = nodes_to_visit_queue.popleft()
 
         if current_active_node == target_node:
-            # Use 'yield from' to execute the path reconstruction
             yield from reconstruct_final_path(parent_tracker, target_node, start_node)
             return
 

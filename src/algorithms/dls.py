@@ -1,38 +1,31 @@
-"""
-Implementation of Depth-Limited Search (DLS).
-Limits the search depth to prevent infinite paths in DFS.
-"""
+def run_dls(grid_matrix, start_node, target_node, total_rows, total_cols, limit=50):
+    nodes_to_visit_stack = [(start_node, 0)]
+    parent_tracker = {}
+    visited_at_depth = {start_node: 0}
 
+    while nodes_to_visit_stack:
+        current_active_node, current_depth = nodes_to_visit_stack.pop()
 
-def run_dls(grid_matrix, start_node, target_node, depth_limit, total_rows, total_cols):
-    return _dls_recursive(
-        start_node,
-        target_node,
-        depth_limit,
-        {},
-        {start_node},
-        grid_matrix,
-        total_rows,
-        total_cols,
-    )
+        if current_active_node == target_node:
+            return parent_tracker
 
+        if current_depth >= limit:
+            continue
 
-def _dls_recursive(current, target, limit, parent_tracker, visited, grid, rows, cols):
-    if current == target:
-        return parent_tracker
-    if limit <= 0:
-        return None
+        if current_active_node != start_node:
+            current_active_node.mark_as_explored()
 
-    current.identify_neighbors(grid, rows, cols)
-    for neighbor in current.neighbor_nodes:
-        if neighbor not in visited:
-            visited.add(neighbor)
-            parent_tracker[neighbor] = current
-            neighbor.mark_as_frontier()
+        current_active_node.identify_neighbors(grid_matrix, total_rows, total_cols)
 
-            result = _dls_recursive(
-                neighbor, target, limit - 1, parent_tracker, visited, grid, rows, cols
-            )
-            if result:
-                return result
+        for neighbor in current_active_node.neighbor_nodes:
+            new_depth = current_depth + 1
+            if (
+                neighbor not in visited_at_depth
+                or new_depth < visited_at_depth[neighbor]
+            ):
+                visited_at_depth[neighbor] = new_depth
+                parent_tracker[neighbor] = current_active_node
+                neighbor.mark_as_frontier()
+                nodes_to_visit_stack.append((neighbor, new_depth))
+        yield True
     return None

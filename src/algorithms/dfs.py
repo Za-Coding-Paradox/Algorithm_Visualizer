@@ -7,7 +7,6 @@ def run_dfs(grid_matrix, start_node, target_node, total_rows, total_cols):
         current_active_node = nodes_to_visit_stack.pop()
 
         if current_active_node == target_node:
-            # Use 'yield from'
             yield from reconstruct_final_path(parent_tracker, target_node, start_node)
             return
 
@@ -22,7 +21,6 @@ def run_dfs(grid_matrix, start_node, target_node, total_rows, total_cols):
                 parent_tracker[neighbor_candidate] = current_active_node
                 neighbor_candidate.mark_as_frontier()
                 nodes_to_visit_stack.append(neighbor_candidate)
-
         yield True
 
 

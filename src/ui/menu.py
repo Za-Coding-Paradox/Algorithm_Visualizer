@@ -9,10 +9,6 @@ import utils.config as configuration_settings
 
 
 class Button:
-    """
-    A clickable UI element.
-    """
-
     def __init__(self, x, y, width, height, text, action_payload):
         self.rect = pygame.Rect(x, y, width, height)
         self.text = text
@@ -42,47 +38,44 @@ class Button:
 
 
 class InterfaceRenderer:
-    """
-    Manages the sidebar menu, buttons, and pop-up overlays.
-    """
-
     def __init__(self, display_surface):
         self.target_surface = display_surface
-        self.standard_text_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 20)
+        self.standard_text_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 16)
         self.header_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 32, bold=True)
         self.popup_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 40, bold=True)
 
-        # Initialize Buttons
         self.buttons = []
         algos = ["BFS", "DFS", "UCS", "DLS", "IDDFS", "BIDIRECTIONAL"]
         start_y = 200
         for i, algo in enumerate(algos):
-            btn = Button(820, start_y + (i * 50), 160, 40, algo, algo)
+            btn = Button(820, start_y + (i * 45), 160, 35, algo, algo)
             self.buttons.append(btn)
 
     def render_control_panel(self, active_algorithm_name, execution_status):
         """
         Draws the sidebar, buttons, and status text.
         """
-        # Sidebar Background (to cover grid on resize if needed)
+        # Clear sidebar
         sidebar_rect = pygame.Rect(
             800,
             0,
-            configuration_settings.WINDOW_WIDTH - 800 + 500,
-            configuration_settings.WINDOW_HEIGHT + 500,
+            configuration_settings.WINDOW_WIDTH - 800,
+            configuration_settings.WINDOW_HEIGHT,
         )
         pygame.draw.rect(
             self.target_surface, configuration_settings.COLOR_BG, sidebar_rect
         )
 
+        # Separator Line
         pygame.draw.line(
             self.target_surface,
             configuration_settings.COLOR_GRID,
             (800, 0),
-            (800, 2000),  # Extended for resizing
+            (800, configuration_settings.WINDOW_HEIGHT),
             2,
         )
 
+        # Title
         title_visual = self.header_font.render(
             "PATHFINDER", True, configuration_settings.COLOR_PATH
         )
@@ -105,18 +98,16 @@ class InterfaceRenderer:
         self.target_surface.blit(status_visual, (815, 80))
 
         algo_visual = self.standard_text_font.render(
-            f"Selected: {active_algorithm_name}",
-            True,
-            configuration_settings.COLOR_START,
+            f"Algo: {active_algorithm_name}", True, configuration_settings.COLOR_START
         )
         self.target_surface.blit(algo_visual, (815, 110))
 
-        # Draw Buttons
+        # Buttons
         for btn in self.buttons:
             btn.draw(self.target_surface)
 
         # Instructions
-        instr_y = 550
+        instr_y = 650
         instructions = [
             "SPACE: Start",
             "C: Reset Grid",
@@ -128,20 +119,16 @@ class InterfaceRenderer:
                 line, True, configuration_settings.COLOR_EMPTY
             )
             self.target_surface.blit(v, (815, instr_y))
-            instr_y += 30
+            instr_y += 25
 
     def render_result_popup(self, success):
-        """
-        Displays a modal overlay when search finishes.
-        """
         overlay = pygame.Surface(
             (configuration_settings.WINDOW_WIDTH, configuration_settings.WINDOW_HEIGHT),
             pygame.SRCALPHA,
         )
-        overlay.fill((0, 0, 0, 180))  # Semi-transparent black
+        overlay.fill((0, 0, 0, 180))
         self.target_surface.blit(overlay, (0, 0))
 
-        # Popup Box
         center_x, center_y = self.target_surface.get_rect().center
         box_rect = pygame.Rect(0, 0, 400, 200)
         box_rect.center = (center_x, center_y)
@@ -160,7 +147,6 @@ class InterfaceRenderer:
             border_radius=10,
         )
 
-        # Text
         msg = "PATH FOUND!" if success else "NO PATH POSSIBLE"
         color = (
             configuration_settings.COLOR_START
@@ -179,9 +165,6 @@ class InterfaceRenderer:
         self.target_surface.blit(sub_surf, sub_rect)
 
     def check_button_clicks(self, pos):
-        """
-        Returns the action payload if a button is clicked.
-        """
         for btn in self.buttons:
             if btn.is_clicked(pos):
                 return btn.action_payload
