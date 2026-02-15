@@ -21,7 +21,7 @@ A modular Python application designed to visualize classic AI search algorithms 
 1. **Clone the repository**:
    ```bash
    git clone https://github.com/Za-Coding-Paradox/AI-Path-Finder-Visualizer.git
-   cd ai_pathfinder
+   cd src/ai_path_finder
    ```
 2. **Install Dependencies**:
    ```bash
