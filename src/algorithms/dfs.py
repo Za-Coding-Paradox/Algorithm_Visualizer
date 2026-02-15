@@ -1,9 +1,3 @@
-"""
-Implementation of Depth-First Search (DFS).
-Explores as far as possible along each branch before backtracking.
-"""
-
-
 def run_dfs(grid_matrix, start_node, target_node, total_rows, total_cols):
     nodes_to_visit_stack = [start_node]
     parent_tracker = {}
@@ -13,12 +7,12 @@ def run_dfs(grid_matrix, start_node, target_node, total_rows, total_cols):
         current_active_node = nodes_to_visit_stack.pop()
 
         if current_active_node == target_node:
-            while current_active_node in parent_tracker:
-                current_active_node = parent_tracker[current_active_node]
-                if current_active_node != start_node:
-                    current_active_node.mark_as_path_segment()
-                yield True
+            # Use 'yield from'
+            yield from reconstruct_final_path(parent_tracker, target_node, start_node)
             return
+
+        if current_active_node != start_node:
+            current_active_node.mark_as_explored()
 
         current_active_node.identify_neighbors(grid_matrix, total_rows, total_cols)
 
@@ -29,6 +23,12 @@ def run_dfs(grid_matrix, start_node, target_node, total_rows, total_cols):
                 neighbor_candidate.mark_as_frontier()
                 nodes_to_visit_stack.append(neighbor_candidate)
 
-        if current_active_node != start_node:
-            current_active_node.mark_as_explored()
+        yield True
+
+
+def reconstruct_final_path(parent_tracker, current_step, start_node):
+    while current_step in parent_tracker:
+        current_step = parent_tracker[current_step]
+        if current_step != start_node:
+            current_step.mark_as_path_segment()
         yield True

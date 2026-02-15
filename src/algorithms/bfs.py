@@ -1,8 +1,3 @@
-"""
-Implementation of Breadth-First Search (BFS).
-Explores all neighbor nodes at the present depth before moving to nodes at the next depth level.
-"""
-
 from collections import deque
 
 
@@ -15,7 +10,9 @@ def run_bfs(grid_matrix, start_node, target_node, total_rows, total_cols):
         current_active_node = nodes_to_visit_queue.popleft()
 
         if current_active_node == target_node:
-            return reconstruct_final_path(parent_tracker, target_node, start_node)
+            # Use 'yield from' to execute the path reconstruction
+            yield from reconstruct_final_path(parent_tracker, target_node, start_node)
+            return
 
         current_active_node.identify_neighbors(grid_matrix, total_rows, total_cols)
 
