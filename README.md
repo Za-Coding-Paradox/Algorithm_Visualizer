@@ -35,24 +35,25 @@ The application utilizes a state-driven interaction model to manage the grid env
 
 1. #### **Mouse Interactions**
 ```
-* **Left Click**: Context-aware placement.
-    * **1st Click**: Sets the **Start Node** (Green).
-    * **2nd Click**: Sets the **Target Node** (Orange).
-    * **3rd+ Clicks**: Places **Walls** (Dark) to create obstacles.
-* **Right Click**: **Erase Mode**. Resets any individual node back to its **Empty** state.
+* Left Click: Context-aware placement.
+    * 1st Click: Sets the **Start Node** (Green).
+    * nd Click: Sets the **Target Node** (Orange).
+    * 3rd+ Clicks: Places **Walls** (Dark) to create obstacles.
+
+* Right Click: Erase Mode. Resets any individual node back to its **Empty** state.
 ```
 
 2. #### **Keyboard Commands**
 ```
-* **Keys 1 - 6**: **Algorithm Selection**. Quickly switch between the following search methods:
+* Keys 1 - 6: Algorithm Selection. Quickly switch between the following search methods:
     1. Breadth-First Search (BFS)
     2. Depth-First Search (DFS)
     3. Uniform Cost Search (UCS)
     4. Depth-Limited Search (DLS)
     5. Iterative Deepening DFS (IDDFS)
     6. Bidirectional Search
-* **SPACE**: **Execute**. Begins the search visualization for the currently selected algorithm.
-* **C Key**: **Full Reset**. Completely wipes the grid, clearing all walls, explored nodes, and paths to start fresh.
+* SPACE: Execute. Begins the search visualization for the currently selected algorithm.
+* C Key**: Full Reset. Completely wipes the grid, clearing all walls, explored nodes, and paths to start fresh.
 ```
 
 ---
