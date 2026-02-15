@@ -20,7 +20,7 @@ A modular Python application designed to visualize classic AI search algorithms 
 ### Installation & Setup
 1. **Clone the repository**:
    ```bash
-   git clone <your-repo-link>
+   git clone https://github.com/Za-Coding-Paradox/Algorithm_Visualizer.git
    cd ai_pathfinder
    ```
 2. **Install Dependencies**:
