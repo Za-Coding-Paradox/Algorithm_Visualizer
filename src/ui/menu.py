@@ -12,7 +12,6 @@ class InterfaceRenderer:
     def __init__(self, display_surface):
         self.target_surface = display_surface
 
-        # Using specific naming for UI resources
         self.standard_text_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 20)
         self.prominent_header_font = pygame.font.SysFont(
             "JetBrainsMono Nerd Font", 32, bold=True
@@ -22,7 +21,7 @@ class InterfaceRenderer:
         """
         Draws the sidebar UI, separating the grid from the control interface.
         """
-        # 1. Draw Section Divider (The line between grid and menu)
+        # Draw Section Divider (The line between grid and menu)
         pygame.draw.line(
             self.target_surface,
             configuration_settings.COLOR_GRID,
@@ -31,20 +30,20 @@ class InterfaceRenderer:
             2,
         )
 
-        # 2. Render Application Title
+        # Render Application Title
         title_visual = self.prominent_header_font.render(
             "AI PATHFINDER", True, configuration_settings.COLOR_PATH
         )
         self.target_surface.blit(title_visual, (815, 50))
 
-        # 3. Render Algorithm Selection Status
+        # Render Algorithm Selection Status
         algorithm_display_text = f"Algorithm: {active_algorithm_name}"
         algorithm_label_visual = self.standard_text_font.render(
             algorithm_display_text, True, configuration_settings.COLOR_START
         )
         self.target_surface.blit(algorithm_label_visual, (815, 120))
 
-        # 4. Render Dynamic Execution Status (Running vs Idle)
+        # Render Dynamic Execution Status (Running vs Idle)
         status_display_color = (
             configuration_settings.COLOR_DYNAMIC
             if execution_status == "RUNNING"
@@ -55,7 +54,7 @@ class InterfaceRenderer:
         )
         self.target_surface.blit(status_label_visual, (815, 150))
 
-        # 5. Render Interaction Guide (User Manual)
+        # Render Interaction Guide (User Manual)
         interaction_instructions = [
             "1-6: Select Algorithm",
             "SPACE: Start Search",
