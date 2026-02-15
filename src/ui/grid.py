@@ -80,13 +80,13 @@ class GridNode:
         """Draws the node and its border onto the provided surface."""
         rect_dimensions = (self.pixel_x, self.pixel_y, self.cell_size, self.cell_size)
         pygame.draw.rect(surface, self.current_color, rect_dimensions)
-        # Draw the grid line border
+
+        # Draws the border of the grid
         pygame.draw.rect(surface, COLOR_GRID, rect_dimensions, 1)
 
     def identify_neighbors(self, grid_matrix, total_rows, total_cols):
         """Standard 4-way connectivity check (Up, Down, Left, Right)."""
         self.neighbor_nodes = []
-        # Movement offsets: (row_change, col_change)
         directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
         for row_change, col_change in directions:
@@ -102,10 +102,8 @@ class GridNode:
                     not potential_neighbor.is_barrier()
                     and potential_neighbor.state_type != "DYNAMIC"
                 ):
+                    # Append to Queue
                     self.neighbor_nodes.append(potential_neighbor)
-
-
-### Grid Management Helpers
 
 
 def initialize_grid(row_count, col_count, cell_size, offset_x, offset_y):
@@ -135,6 +133,7 @@ def get_node_from_mouse_click(
     pos_x, pos_y = mouse_position
 
     # Reverse the pixel math: (Pixel - Offset) / Size
+    # Translates absolute screen pixels into grid indices by subtracting the padding and dividing by cell width.
     target_col = (pos_x - offset_x) // cell_size
     target_row = (pos_y - offset_y) // cell_size
 
