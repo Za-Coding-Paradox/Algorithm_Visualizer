@@ -88,9 +88,17 @@ class GridNode:
     def identify_neighbors(self, grid_matrix, total_rows, total_cols):
         """Standard 4-way connectivity check (Up, Down, Left, Right)."""
         self.neighbor_nodes = []
-        directions = [(1, 0), (-1, 0), (0, 1), (0, -1)]
 
-        for row_change, col_change in directions:
+        STRICT_MOVEMENT_ORDER = [
+            (-1, 0),  # 1. Up
+            (0, 1),  # 2. Right
+            (1, 0),  # 3. Bottom
+            (1, 1),  # 4. Bottom-Right (Main Diagonal)
+            (0, -1),  # 5. Left
+            (-1, -1),  # 6. Top-Left (Main Diagonal)
+        ]
+
+        for row_change, col_change in STRICT_MOVEMENT_ORDER:
             target_row = self.row + row_change
             target_col = self.col + col_change
 

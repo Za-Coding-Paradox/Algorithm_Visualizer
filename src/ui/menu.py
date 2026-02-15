@@ -33,7 +33,7 @@ class InterfaceRenderer:
 
         # Render Application Title
         title_visual = self.prominent_header_font.render(
-            "AI PATHFINDER", True, configuration_settings.COLOR_PATH
+            "GOOD PERFORMANCE TIME APP", True, configuration_settings.COLOR_PATH
         )
         self.target_surface.blit(title_visual, (815, 50))
 

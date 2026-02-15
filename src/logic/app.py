@@ -4,6 +4,8 @@ This module manages the high-level execution flow, connecting the UI renderer,
 the logic simulation engine, and the coordinate system.
 """
 
+import random
+
 import pygame
 
 import utils.config as global_config
@@ -136,14 +138,21 @@ class PathfinderApp:
             # Clear screen with background color
             self.display_surface.fill(global_config.COLOR_BG)
 
-            # Step 1: Progression Logic (if simulation is active)
             if self.logic_orchestrator.is_running:
-                self.logic_orchestrator.step()
+                # Dynamic Obstacle Spawn (e.g., 2% chance per step)
+                if random.random() < global_config.DYNAMIC_SPAWN_CHANCE:
+                    self._spawn_dynamic_obstacle()
 
-            # Step 2: Visualization Layer
+                # Re-planning Logic
+                if self.logic_orchestrator.current_path_is_blocked(self.grid_matrix):
+                    self.logic_orchestrator.replan(
+                        self.grid_matrix, self.origin_node, self.destination_node
+                    )
+
+            # Visualization Layer
             render_grid_state(self.display_surface, self.grid_matrix)
 
-            # Step 3: UI/Control Layer
+            # UI/Control Layer
             current_execution_status = (
                 "RUNNING" if self.logic_orchestrator.is_running else "IDLE"
             )
@@ -151,7 +160,7 @@ class PathfinderApp:
                 self.logic_orchestrator.selected_algorithm, current_execution_status
             )
 
-            # Step 4: Input Processing
+            # Input Processing
             self._process_user_inputs()
 
             # Maintain targeted Frame Rate
