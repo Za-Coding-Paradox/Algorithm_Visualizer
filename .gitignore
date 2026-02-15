@@ -21,6 +21,8 @@ ENV/
 # Do not ignore poetry.lock.
 poetry.toml
 
+pyprojectconfig.toml
+
 # --- Mise (rtx) ---
 # mise.toml is usually committed, but local overrides should be ignored
 .mise.local.toml
