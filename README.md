@@ -33,14 +33,17 @@ A modular Python application designed to visualize classic AI search algorithms 
 
 The application utilizes a state-driven interaction model to manage the grid environment and algorithm execution.
 
-#### **Mouse Interactions**
+1. #### **Mouse Interactions**
+```
 * **Left Click**: Context-aware placement.
     * **1st Click**: Sets the **Start Node** (Green).
     * **2nd Click**: Sets the **Target Node** (Orange).
     * **3rd+ Clicks**: Places **Walls** (Dark) to create obstacles.
 * **Right Click**: **Erase Mode**. Resets any individual node back to its **Empty** state.
+```
 
-#### **Keyboard Commands**
+2. #### **Keyboard Commands**
+```
 * **Keys 1 - 6**: **Algorithm Selection**. Quickly switch between the following search methods:
     1. Breadth-First Search (BFS)
     2. Depth-First Search (DFS)
@@ -50,6 +53,7 @@ The application utilizes a state-driven interaction model to manage the grid env
     6. Bidirectional Search
 * **SPACE**: **Execute**. Begins the search visualization for the currently selected algorithm.
 * **C Key**: **Full Reset**. Completely wipes the grid, clearing all walls, explored nodes, and paths to start fresh.
+```
 
 ---
 
@@ -64,11 +68,6 @@ This project is a collaborative effort developed for the AI Pathfinder project.
 * **Mtz00**
     * Role: UI/UX Designer & Grid Systems Engineering
     * GitHub: [github.com/Mtz00](https://github.com/Mtz00)
-
-**Project Information:**
-* **Deadline**: February 16, 2026
-* **Location**: Faisalabad, Punjab, Pakistan
-* **Stack**: Python, Pygame, Poetry, Neovim 0.11
 
 ---
 
