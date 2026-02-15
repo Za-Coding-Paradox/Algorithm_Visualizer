@@ -4,10 +4,10 @@ This module manages the high-level execution flow, connecting the UI renderer,
 the logic simulation engine, and the coordinate system.
 """
 
-import constants as global_config
 import pygame
-from logic_manager import SimulationManager as LogicEngine
 
+import utils.config as global_config
+from logic.simulation_manager import SimulationManager as LogicEngine
 from ui.grid import get_node_from_mouse_click, initialize_grid, render_grid_state
 from ui.menu import InterfaceRenderer as ControlPanel
 

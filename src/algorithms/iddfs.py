@@ -4,7 +4,7 @@ Implementation of Iterative Deepening DFS (IDDFS).
 Repeatedly applies Depth-Limited Search with an increasing limit.
 """
 
-from dls import run_dls
+from algorithms.dls import run_dls
 
 
 def run_iddfs(grid_matrix, start_node, target_node, total_rows, total_cols):

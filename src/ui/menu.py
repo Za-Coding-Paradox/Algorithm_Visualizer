@@ -4,8 +4,9 @@ Responsible for rendering the Control Panel and translating
 application state into visual text on the screen.
 """
 
-import constants as configuration_settings
 import pygame
+
+import utils.config as configuration_settings
 
 
 class InterfaceRenderer:

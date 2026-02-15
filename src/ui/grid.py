@@ -4,7 +4,8 @@ Handles the state of individual cells and the rendering logic
 """
 
 import pygame
-from constants import (
+
+from utils.config import (
     COLOR_DYNAMIC,
     COLOR_EMPTY,
     COLOR_EXPLORED,
