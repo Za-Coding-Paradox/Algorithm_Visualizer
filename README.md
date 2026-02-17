@@ -1,72 +1,192 @@
 # AI Pathfinder Visualizer
 
-A modular Python application designed to visualize classic AI search algorithms on a 2D grid using a **Catppuccin Mocha** color palette. This project focuses on high-level abstraction and strict separation of concerns between UI, Logic, and Algorithms.
-
-## 🛠️ Features
-* **6 Search Algorithms**: Includes BFS, DFS, UCS, DLS, IDDFS, and Bidirectional Search.
-* **Real-time Visualization**: Generators are used to visualize the frontier expansion and path discovery step-by-step.
-* **Interactive UI**: A custom-built control panel and grid interaction system using Pygame.
-* **Clean Architecture**: Deeply abstracted layers for easier maintenance and testing.
+A real-time, interactive pathfinding algorithm visualizer built with Python and Pygame. Watch classical search algorithms explore a grid and find the shortest path — step by step.
 
 ---
 
-## 🚀 Getting Started
+## Features
 
-### Prerequisites
-* **Python 3.10+**
-* **Poetry** (Python package manager)
-* **JetBrainsMono Nerd Font** (Recommended for UI rendering)
-
-### Installation & Setup
-1. **Clone the repository**:
-   ```bash
-   git clone https://github.com/Za-Coding-Paradox/AI-Path-Finder-Visualizer.git
-   cd src/ai_path_finder
-   ```
-2. **Install Dependencies**:
-   ```bash
-   poetry install
-   ```
----
-
-### 🎮 Controls
-
-#### **Mouse Interactions**
-* **Left Click**: Context-aware placement.
-    * **1st Click**: Sets the **Start Node** (Green).
-    * **2nd Click**: Sets the **Target Node** (Orange).
-    * **3rd+ Clicks**: Places **Walls** (Dark) to create obstacles.
-* **Right Click**: **Erase Mode**. Resets any individual node back to its **Empty** state.
-
-#### **Keyboard Commands**
-* **Keys 1 - 6**: **Algorithm Selection**. Quickly switch between the following search methods:
-    1. Breadth-First Search (BFS)
-    2. Depth-First Search (DFS)
-    3. Uniform Cost Search (UCS)
-    4. Depth-Limited Search (DLS)
-    5. Iterative Deepening DFS (IDDFS)
-    6. Bidirectional Search
-* **SPACE**: **Execute**. Begins the search visualization for the currently selected algorithm.
-* **C Key**: **Full Reset**. Completely wipes the grid, clearing all walls, explored nodes, and paths to start fresh.
+- **6 Search Algorithms** visualized in real-time:
+  - Breadth-First Search (BFS)
+  - Depth-First Search (DFS)
+  - Uniform Cost Search (UCS) with random cell weights
+  - Depth-Limited Search (DLS)
+  - Iterative Deepening DFS (IDDFS)
+  - Bidirectional BFS
+- Interactive grid — click to place start, target, and walls
+- Step-by-step animation with configurable speed
+- Visual distinction between frontier, explored, and path nodes
+- Elapsed time display on completion
+- UCS mode renders per-cell weights directly on the grid
 
 ---
 
-### 👥 Project Owners & Contact
-
-This project is a collaborative effort developed for the AI Pathfinder project.
-
-**Primary Developers:**
-* **za-coding-paradox**
-    * Role: Lead Logic Architect & Algorithm Implementation
-    * GitHub: [github.com/za-coding-paradox](https://github.com/za-coding-paradox)
-* **Mtz00**
-    * Role: UI/UX Designer & Grid Systems Engineering
-    * GitHub: [github.com/Mtz00](https://github.com/Mtz00)
+## Project Structure
+```
+.
+└── src/
+    ├── ai_path_finder/
+    │   └── main.py               # Entry point
+    ├── algorithms/
+    │   ├── bfs.py
+    │   ├── dfs.py
+    │   ├── ucs.py
+    │   ├── dls.py
+    │   ├── iddfs.py
+    │   └── bidirectional.py
+    ├── logic/
+    │   ├── app.py                # Application orchestrator
+    │   └── simulation_manager.py # Bridges UI and algorithm layer
+    ├── ui/
+    │   ├── grid.py               # Grid rendering and node logic
+    │   └── menu.py               # Sidebar, buttons, and popups
+    └── utils/
+        └── config.py             # Global constants and color palette
+```
 
 ---
 
-### 🛠️ Technical Details
+## Prerequisites
 
-* **Visual Palette**: Inspired by [Catppuccin Mocha](https://github.com/catppuccin/catppuccin).
-* **Environment**: Configured via **Poetry** for dependency management.
-* **Architecture**: Implements a strict Model-View-Controller (MVC) style abstraction.
+### 1. Python 3.10+
+
+Download from [python.org](https://www.python.org/downloads/).
+On Windows, check **"Add Python to PATH"** during setup.
+
+Verify:
+```bash
+python --version
+```
+
+### 2. Poetry
+
+**Linux / macOS / WSL:**
+```bash
+curl -sSL https://install.python-poetry.org | python3 -
+```
+
+**Windows (PowerShell):**
+```powershell
+(Invoke-WebRequest -Uri https://install.python-poetry.org -UseBasicParsing).Content | python -
+```
+
+Verify:
+```bash
+poetry --version
+```
+
+> On Windows the default install path is `%APPDATA%\Python\Scripts` — ensure it is on your PATH, then restart your terminal.
+
+---
+
+## Getting Started
+
+### Step 1 — Clone the Repository
+```bash
+git clone https://github.com/your-username/ai-path-finder.git
+cd ai-path-finder
+```
+
+### Step 2 — Install Dependencies
+```bash
+poetry install
+```
+
+This creates an isolated virtual environment and installs all required packages as defined in `pyproject.toml`.
+
+### Step 3 — Run the Application
+```bash
+poetry run python src/ai_path_finder/main.py
+```
+
+Or activate the environment first, then run directly:
+```bash
+poetry shell
+python src/ai_path_finder/main.py
+```
+
+---
+
+## How to Use
+
+Once the application window opens:
+
+| Action | Input |
+|---|---|
+| Place Start Node | Left-click any empty cell (1st click) |
+| Place Target Node | Left-click any empty cell (2nd click) |
+| Draw Walls | Hold and drag left-click over cells |
+| Erase a Cell | Right-click any node |
+| Select Algorithm | Click an algorithm button in the sidebar |
+| Start Simulation | Press `SPACE` |
+| Reset Grid | Press `C` |
+
+**Tips:**
+
+- Both a start and a target node must be placed before pressing `SPACE`.
+- Walls are impassable — use them to build mazes and stress-test each algorithm.
+- Switch algorithms via the sidebar buttons to compare their exploration patterns.
+- In **UCS** mode, each cell displays a random weight (1–5). The algorithm finds the minimum-cost path, not necessarily the geometrically shortest one.
+- After a simulation completes, a popup shows whether a path was found and the total elapsed time. Press `C` to reset and run again.
+
+---
+
+## Color Legend
+
+| Color | Meaning |
+|---|---|
+| Green | Start node |
+| Orange | Target node |
+| Yellow | Frontier — nodes queued for exploration |
+| Blue | Explored — nodes already visited |
+| Pink | Final path |
+| Dark / Black | Wall |
+
+---
+
+## Configuration
+
+Edit `src/utils/config.py` to tune the visualizer:
+```python
+GRID_SIZE   = 25      # Number of rows and columns
+CELL_SIZE   = 20      # Pixel size per cell
+STEP_DELAY  = 0.05    # Delay in seconds between algorithm steps (lower = faster)
+FPS         = 60      # Maximum render frame rate
+```
+
+Setting `STEP_DELAY` to `0` runs the simulation at maximum speed.
+
+---
+
+## Dependencies
+
+| Package | Purpose |
+|---|---|
+| `pygame` | Window rendering, grid drawing, and input handling |
+
+All dependencies are declared in `pyproject.toml` and installed automatically via `poetry install`.
+
+---
+
+## Windows Quick-Start
+
+A `setup_and_run.bat` file is included in the repository root. Double-clicking it will:
+
+1. Verify Python is installed and accessible
+2. Check for Poetry and install it if missing
+3. Run `poetry install` to configure the environment
+4. Launch the application
+
+See [`setup_and_run.bat`](./setup_and_run.bat).
+
+---
+
+## License
+
+See [`LICENSE.md`](./LICENSE.md).
+
+---
+
+## Contributing
+
+Pull requests are welcome. For significant changes, please open an issue first to discuss your proposal.
