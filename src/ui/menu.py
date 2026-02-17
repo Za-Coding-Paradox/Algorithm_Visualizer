@@ -110,16 +110,24 @@ class InterfaceRenderer:
             self.target_surface.blit(v, (815, instr_y))
             instr_y += 25
 
-    def render_result_popup(self, success):
+    def render_result_popup(self, success, elapsed_time=0.0):
+        # Semi-transparent overlay
+        # We only cover the bottom area to not obstruct the view too much?
+        # Or just cover everything lightly
         overlay = pygame.Surface(
             (configuration_settings.WINDOW_WIDTH, configuration_settings.WINDOW_HEIGHT),
             pygame.SRCALPHA,
         )
-        overlay.fill((0, 0, 0, 180))
+        overlay.fill((0, 0, 0, 100)) # Lighter overlay
         self.target_surface.blit(overlay, (0, 0))
 
-        center_x, center_y = self.target_surface.get_rect().center
-        box_rect = pygame.Rect(0, 0, 400, 200)
+        # Popup Box - Repositioned BELOW the grid
+        # Grid Center X is approx 400. Grid ends at Y=550.
+        # Let's place it at Y=680
+        center_x = 400
+        center_y = 680
+        
+        box_rect = pygame.Rect(0, 0, 400, 150)
         box_rect.center = (center_x, center_y)
 
         pygame.draw.rect(
@@ -145,8 +153,14 @@ class InterfaceRenderer:
         )
 
         text_surf = self.popup_font.render(msg, True, color)
-        text_rect = text_surf.get_rect(center=(center_x, center_y - 20))
+        text_rect = text_surf.get_rect(center=(center_x, center_y - 30))
         self.target_surface.blit(text_surf, text_rect)
+        
+        # Display Time
+        time_msg = f"Time: {elapsed_time:.2f}s"
+        time_surf = self.standard_text_font.render(time_msg, True, (200, 200, 200))
+        time_rect = time_surf.get_rect(center=(center_x, center_y + 10))
+        self.target_surface.blit(time_surf, time_rect)
 
         sub_surf = self.standard_text_font.render(
             "Press 'C' to Reset", True, configuration_settings.COLOR_EXPLORED

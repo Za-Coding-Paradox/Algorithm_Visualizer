@@ -2,6 +2,7 @@
 Logic Manager for the AI Pathfinder.
 Bridges UI and Algorithms.
 """
+import time
 from algorithms.bfs import run_bfs
 from algorithms.bidirectional import run_bidirectional
 from algorithms.dfs import run_dfs
@@ -16,6 +17,10 @@ class SimulationManager:
         self.is_finished = False
         self.current_generator = None
         self.selected_algorithm = "BFS"
+        
+        # Timer variables
+        self.start_time = 0
+        self.duration = 0.0
 
         self.algorithm_map = {
             "BFS": run_bfs,
@@ -33,12 +38,14 @@ class SimulationManager:
     def start_simulation(self, grid_matrix, start_node, target_node, rows, cols):
         if not self.is_running and start_node and target_node:
             self.is_finished = False
+            self.duration = 0.0
             
             solver_function = self.algorithm_map[self.selected_algorithm]
             self.current_generator = solver_function(
                 grid_matrix, start_node, target_node, rows, cols
             )
             self.is_running = True
+            self.start_time = time.time() # Start Timer
             return True
         return False
 
@@ -55,4 +62,5 @@ class SimulationManager:
     def stop_simulation(self):
         self.is_running = False
         self.is_finished = True
+        self.duration = time.time() - self.start_time # Calculate Duration
         self.current_generator = None

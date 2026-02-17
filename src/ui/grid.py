@@ -2,6 +2,7 @@
 Grid definition for the AI Pathfinder.
 """
 import pygame
+import random
 from utils.config import (
     COLOR_EMPTY, COLOR_EXPLORED, COLOR_FRONTIER, COLOR_GRID,
     COLOR_PATH, COLOR_START, COLOR_TARGET, COLOR_WALL
@@ -17,6 +18,7 @@ class GridNode:
         self.current_color = COLOR_EMPTY
         self.state_type = "EMPTY"
         self.neighbor_nodes = []
+        self.weight = random.randint(1, 5)
 
     def get_grid_coordinates(self):
         return self.row, self.col
@@ -90,10 +92,31 @@ def initialize_grid(row_count, col_count, cell_size, offset_x, offset_y):
     return grid_matrix
 
 
-def render_grid_state(surface, grid_matrix):
+def render_grid_state(surface, grid_matrix, active_algorithm=None):
+    """
+    Renders grid nodes. 
+    If active_algorithm is 'UCS', it also renders the weight numbers.
+    """
+    # Create font only if needed (for performance, normally init once, but this is fine)
+    weight_font = None
+    if active_algorithm == "UCS":
+        weight_font = pygame.font.SysFont("JetBrainsMono Nerd Font", 12, bold=True)
+
     for row in grid_matrix:
         for node in row:
             node.render(surface)
+            
+            # RENDER WEIGHTS ONLY FOR UCS
+            if active_algorithm == "UCS" and node.state_type != "WALL":
+                # Choose color: Black usually, White if background is dark/Start/Target
+                text_color = (0, 0, 0)
+                if node.state_type in ["START", "TARGET", "WALL"]:
+                     text_color = (255, 255, 255)
+                
+                text_surf = weight_font.render(str(node.weight), True, text_color)
+                # Center text in the cell
+                text_rect = text_surf.get_rect(center=(node.pixel_x + node.cell_size//2, node.pixel_y + node.cell_size//2))
+                surface.blit(text_surf, text_rect)
 
 
 def get_node_from_mouse_click(mouse_position, row_count, col_count, cell_size, offset_x, offset_y):

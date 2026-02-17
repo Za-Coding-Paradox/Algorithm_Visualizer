@@ -135,7 +135,12 @@ class PathfinderApp:
                 if not self.logic_orchestrator.is_running and self.logic_orchestrator.is_finished:
                     self.finish_time_stamp = time.time()
 
-            render_grid_state(self.display_surface, self.grid_matrix)
+            # Pass selected algorithm to render logic
+            render_grid_state(
+                self.display_surface, 
+                self.grid_matrix, 
+                self.logic_orchestrator.selected_algorithm
+            )
 
             if self.logic_orchestrator.is_running:
                 status = "RUNNING"
@@ -153,7 +158,11 @@ class PathfinderApp:
                 elapsed = time.time() - self.finish_time_stamp
                 if elapsed > self.POPUP_DELAY_SECONDS:
                     success = any(node.current_color == global_config.COLOR_PATH for row in self.grid_matrix for node in row)
-                    self.ui_renderer.render_result_popup(success)
+                    
+                    self.ui_renderer.render_result_popup(
+                        success, 
+                        self.logic_orchestrator.duration
+                    )
 
             self._process_user_inputs()
             pygame.display.flip()
